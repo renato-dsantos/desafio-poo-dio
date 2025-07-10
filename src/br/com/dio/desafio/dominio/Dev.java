@@ -7,9 +7,24 @@ public class Dev {
     private Set<Conteudo> conteudoInscritos = new LinkedHashSet<>();   
     private Set<Conteudo> conteudoConcluidos = new LinkedHashSet<>();
 
-    public void inscreverBootcamp(Bootcamp bootcamp){ }
-    public void progredir(){}
-    public void calcularTotalXp(){}
+    public void inscreverBootcamp(Bootcamp bootcamp){ 
+        this.conteudoInscritos.addAll(bootcamp.getConteudos()); 
+        bootcamp.getDevsInscritos().add(this);                     
+    }
+
+    public void progredir(){
+              Optional<Conteudo> conteudo = this.conteudoInscritos.stream().finfFirst(); 
+             if(conteudo.isPresent()){
+                this.conteudoConcluidos.add(conteudo.get());
+                this.conteudoInscritos.remove(conteudo.get());
+            }else{
+                System.err.println("Você não está matriculado em nenhum conteúdo!");
+            }
+    }
+
+    public double calcularTotalXp(){
+        this.conteudoConcluidos.stream().mapToDouble(Conteudo::calcularX).sum());
+    }
 
     public String getNome(){
         return nome;
